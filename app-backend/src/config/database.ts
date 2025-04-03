@@ -1,17 +1,14 @@
-// src/config/database.ts
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
 
-dotenv.config();
+import mongoose from 'mongoose';
 
-const dbName = process.env.MYSQL_DB || 'yelp';
-const dbPassword = process.env.MYSQL_PASSWORD || 'root';
-const dbHost = process.env.MYSQL_HOST || 'db_yelp';
+const connectDB = async (): Promise<void> => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/monrestodb');
+    console.log(`MongoDB connecté: ${conn.connection.host}`);
+  } catch (error) {
+    console.error('Erreur de connexion à MongoDB', error);
+    process.exit(1);
+  }
+};
 
-const sequelize = new Sequelize(dbName, dbPassword, {
-  host: dbHost,
-  dialect: 'mysql',
-  logging: false, 
-});
-
-export default sequelize;
+export default connectDB;
