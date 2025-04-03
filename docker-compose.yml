@@ -1,28 +1,21 @@
+
+
 services:
-  app: 
+  app:
     build: ./app-backend
     ports:
-      - "4000:4000"
+      - "3000:3000"
     environment:
-      - DB_SERVER=db_yelp
-
+      - MONGO_URL=mongodb://mongo:27017/monrestodb
     depends_on:
-      - db_yelp
+      - mongo
 
-  db_yelp:
-    image: mysql:8.0
+  mongo:
+    image: mongo:latest
     ports:
-      - "3306:3306"
+      - "27017:27017"
     volumes:
-      - db_yelp_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: yelp
-    healthcheck: 
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - mongo-data:/data/db
 
 volumes:
-  db_yelp_data:
+  mongo-data:
