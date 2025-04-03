@@ -1,0 +1,28 @@
+services:
+  app: 
+    build: ./app-backend
+    ports:
+      - "4000:4000"
+    environment:
+      - DB_SERVER=db_yelp
+
+    depends_on:
+      - db_yelp
+
+  db_yelp:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_yelp_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: yelp
+    healthcheck: 
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_yelp_data:
